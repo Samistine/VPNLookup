@@ -18,21 +18,27 @@ import java.net.SocketTimeoutException;
  */
 public class XioaxHostCheck implements Check {
 
-    final Properties prop;
     final String api;
     final String apiKey;
     final HTTPClient client;
     final Gson gson;
 
     public XioaxHostCheck() {
-        this.prop = new Properties();
+        Properties prop = new Properties();
         try {
-            this.prop.load(getClass().getResourceAsStream("XioaxHostCheck.properties"));
+            prop.load(getClass().getResourceAsStream("XioaxHostCheck.properties"));
         } catch (IOException ex) {
             Logger.getLogger(XioaxHostCheck.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.api = prop.getProperty("api", "http://tools.xioax.com/networking/ip/");
         this.apiKey = prop.getProperty("apikey", null);
+        this.client = new HTTPClient();
+        this.gson = new Gson();
+    }
+
+    public XioaxHostCheck(String api, String key) {
+        this.api = api;
+        this.apiKey = key;
         this.client = new HTTPClient();
         this.gson = new Gson();
     }
